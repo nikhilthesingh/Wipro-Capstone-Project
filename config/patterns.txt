@@ -1,0 +1,3 @@
+error
+failed|failure
+unauthorized|denied
