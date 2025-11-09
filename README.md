@@ -1,23 +1,59 @@
-# Wipro Capstone Project
+# Wipro Capstone Project — Bash Maintenance Suite (Linux, basic)
 
-Bash Maintenance Suite (Day 1 draft)
+Very simple Bash scripts for basic system maintenance on Linux:
+- Day 1: Backup a folder into a timestamped directory
+- Day 2: System update (apt only) + cleanup
+- Day 3: Log monitoring (file-based) using grep and a small patterns file
+- Day 4: Menu script to run all tasks
+- Day 5: Short mapping doc + a tiny test script
 
-This repo holds a Linux-only bash scripting project for my capstone. Day 1 focuses on backups.
+I kept it basic on purpose (intro level, no advanced stuff).
 
-Current scripts:
-- scripts/common.sh (shared helpers)
-- scripts/backup.sh (time-stamped rsync backup, retention)
-
-Next steps (coming days): updates, log monitor, menu, tests.
-
-Usage (Day1):
+## Setup
+Make scripts executable:
+```bash
+chmod +x scripts/*.sh
 ```
-./scripts/backup.sh -n   # dry-run
-./scripts/backup.sh      # real run
+Optional: edit `config/config.env` to change backup source/destination.
+
+## Usage
+Day 1 (backup):
+```bash
+./scripts/backup.sh -n              # dry-run (shows what would happen)
+./scripts/backup.sh                 # real backup
 ```
 
-Config in config/config.env (edit paths if needed).
+Day 2 (update apt-based systems):
+```bash
+./scripts/update.sh -n              # dry-run
+./scripts/update.sh                 # real run (uses sudo)
+```
 
-Logs will appear in logs/maintenance.log once other parts land.
+Day 3 (log monitor):
+```bash
+./scripts/log_monitor.sh -1         # scan once and exit
+./scripts/log_monitor.sh            # continuous (Ctrl+C to stop)
+```
 
--- initial draft
+Day 4 (menu):
+```bash
+./scripts/menu.sh
+```
+
+Day 5 (basic checks):
+```bash
+./scripts/test_basic.sh
+```
+
+Logs (simple) are appended to logs/maintenance.log.
+
+## Notes
+- Backup uses rsync if available, else cp -r. Commented “find … -mtime” line shows optional retention cleanup.
+- Update script assumes apt (Ubuntu/Debian) to keep it basic.
+- Log monitor greps `/var/log/syslog` or falls back to `/var/log/messages` with patterns in `config/patterns.txt`.
+- Test script just sanity-checks main scripts; not formal tests.
+
+## Possible Improvements
+- Support other package managers (dnf, yum, pacman, etc.).
+- Add exclusions to backup (node_modules, large caches).
+- Better alerts for logs (e.g., notify-send).
